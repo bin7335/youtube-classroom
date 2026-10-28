@@ -4,14 +4,14 @@
 
   // 숨김 항목: key → 팝업 라벨. 순서가 팝업 표시 순서다.
   const HIDE_OPTIONS = [
-    ['sidebar', '오른쪽 추천 영상'],
+    ['sidebar', '추천 영상'],
     ['comments', '댓글'],
-    ['endscreen', '영상 끝 추천 화면'],
-    ['cards', '영상 중 정보 카드(i)'],
-    ['home', '홈 화면 추천·쇼츠'],
-    ['search', '검색어 자동완성·이전 검색어'],
-    ['account', '계정 아이콘·알림·구독·시청 기록'],
-    ['embed', '다른 사이트에 넣은 영상(패들렛 등) 추천'],
+    ['endscreen', '종료 화면'],
+    ['cards', '정보 카드'],
+    ['home', '홈·쇼츠'],
+    ['search', '검색 기록'],
+    ['account', '계정 정보'],
+    ['embed', '삽입 영상'],
   ];
 
   const DEFAULTS = Object.freeze({

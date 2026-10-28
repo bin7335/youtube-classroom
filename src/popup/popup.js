@@ -9,18 +9,20 @@
   // ---------- 설정 ----------
   const hideList = $('hideList');
   for (const [key, label] of Y.HIDE_OPTIONS) {
-    const row = document.createElement('label');
-    row.className = 'row';
+    const chip = document.createElement('label');
+    chip.className = 'chip';
     const cb = document.createElement('input');
     cb.type = 'checkbox';
     cb.dataset.hide = key;
-    row.append(cb, ' ' + label);
-    hideList.appendChild(row);
+    const text = document.createElement('span');
+    text.textContent = label;
+    chip.append(cb, text);
+    hideList.appendChild(chip);
   }
 
   function render() {
     $('enabled').checked = settings.enabled;
-    $('masterState').textContent = settings.enabled ? '켜짐 · 아래 항목을 가립니다' : '꺼짐 · 유튜브가 원래대로 보입니다';
+    $('masterState').textContent = settings.enabled ? '수업 모드' : '꺼짐';
     document.body.classList.toggle('off', !settings.enabled);
     hideList.querySelectorAll('input[data-hide]').forEach((cb) => { cb.checked = settings.hide[cb.dataset.hide]; });
     $('autoplayOff').checked = settings.autoplayOff;
@@ -56,7 +58,6 @@
   if (!state || !state.videoId) return;
 
   $('segGroup').hidden = false;
-  $('segHint').hidden = true;
   const key = Y.segmentKey(state.videoId);
   const msg = (text, err) => { $('segMsg').textContent = text; $('segMsg').classList.toggle('err', !!err); };
 
@@ -86,13 +87,12 @@
     const rawEnd = $('segEnd').value.trim();
     const start = rawStart ? Y.parseTime(rawStart) : null;
     const end = rawEnd ? Y.parseTime(rawEnd) : null;
-    if ((rawStart && start == null) || (rawEnd && end == null)) return msg('시간은 2:10 또는 130 처럼 입력하세요', true);
+    if ((rawStart && start == null) || (rawEnd && end == null)) return msg('예: 2:10', true);
     const loop = $('segLoop').checked;
-    if (start == null && end == null && !loop) return msg('시작·끝을 입력하거나 반복을 켜세요', true);
-    if (!Y.normalizeSegment({ start, end, loop })) return msg('끝은 시작보다 뒤여야 합니다', true);
+    if (start == null && end == null && !loop) return msg('시간을 입력하세요', true);
+    if (!Y.normalizeSegment({ start, end, loop })) return msg('끝이 시작보다 앞입니다', true);
     await chrome.storage.local.set({ [key]: { start, end, loop, savedAt: Date.now() } });
-    const range = `${Y.formatTime(start ?? 0)} ~ ${end != null ? Y.formatTime(end) : '끝까지'}`;
-    msg(`저장됨: ${range}${loop ? ' · 반복' : ''}`);
+    msg('저장됨');
   });
 
   $('segClear').addEventListener('click', async () => {
@@ -100,6 +100,6 @@
     $('segStart').value = '';
     $('segEnd').value = '';
     $('segLoop').checked = false;
-    msg('구간을 지웠습니다');
+    msg('');
   });
 })();

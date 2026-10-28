@@ -87,8 +87,8 @@ try {
   }
   const loopOk = samples.every((s) => !s.paused && !s.black && s.t >= 1.9 && s.t < 4.6);
   check('구간 반복 재생', loopOk, samples.map((s) => s.t.toFixed(1)).join(','));
-  const loopLabel = await page.locator('.ytc-seg-btn[data-part="loop"]').textContent();
-  check('반복 버튼 표시', loopLabel.includes('반복 중'), loopLabel);
+  const loopSet = await page.locator('.ytc-seg-btn[data-part="loop"]').getAttribute('data-set');
+  check('반복 버튼 켜짐 표시', loopSet === '1', `data-set=${loopSet}`);
 
   // 수업 모드 끄기 → 새로고침 없이 클래스 제거
   await sw.evaluate(async () => {

@@ -53,7 +53,7 @@ html.ytc-hide-home ytd-watch-flexy ytd-reel-shelf-renderer {
   display: none !important;
 }
 html.ytc-hide-home ytd-browse[page-subtype="home"]::after {
-  content: "수업 모드: 홈 추천이 숨겨져 있습니다. 위 검색창에서 영상을 찾으세요.";
+  content: "수업 모드";
   display: block;
   padding: 80px 24px;
   text-align: center;
@@ -115,7 +115,7 @@ html.ytc-embed.ytc-hide-embed .ytp-impression-link {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  font-family: "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  font-family: "YouTube Sans", Roboto, "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
   color: rgba(255, 255, 255, 0.55);
   font-size: 15px;
 }
@@ -135,25 +135,27 @@ html.ytc-embed.ytc-hide-embed .ytp-impression-link {
 .ytc-seg-group {
   display: inline-flex !important;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   height: 100%;
   vertical-align: top;
-  margin-right: 6px;
+  margin-right: 4px;
 }
 .ytc-seg-btn {
-  font-family: "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
-  font-size: 12px;
+  font-family: "YouTube Sans", Roboto, "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
   line-height: 1;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.85);
+  background: transparent;
+  border: 0;
   border-radius: 6px;
-  padding: 5px 8px;
+  padding: 6px 8px;
   cursor: pointer;
   white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
-.ytc-seg-btn:hover { background: rgba(255, 255, 255, 0.26); }
-.ytc-seg-btn[data-set="1"] { background: rgba(62, 166, 255, 0.45); border-color: rgba(62, 166, 255, 0.9); }
+.ytc-seg-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.12); }
+.ytc-seg-btn[data-set="1"] { color: #fff; background: rgba(62, 166, 255, 0.35); }
 
 .ytc-toast {
   position: absolute;
@@ -163,7 +165,7 @@ html.ytc-embed.ytc-hide-embed .ytp-impression-link {
   z-index: 2147483001;
   background: rgba(0, 0, 0, 0.8);
   color: #fff;
-  font-family: "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  font-family: "YouTube Sans", Roboto, "Pretendard Variable", Pretendard, "Malgun Gothic", sans-serif;
   font-size: 14px;
   padding: 8px 14px;
   border-radius: 8px;

@@ -95,10 +95,9 @@
     if (!p || p.querySelector('.ytc-black')) return;
     const wrap = document.createElement('div');
     wrap.className = 'ytc-black';
+    wrap.dataset.reason = reason;
     const box = document.createElement('div');
     box.className = 'ytc-black-box';
-    const msg = document.createElement('div');
-    msg.textContent = reason === 'segment' ? '지정한 구간이 끝났습니다' : '영상이 끝났습니다';
     const btn = document.createElement('button');
     btn.className = 'ytc-black-replay';
     btn.type = 'button';
@@ -107,7 +106,7 @@
       e.stopPropagation();
       replay();
     });
-    box.append(msg, btn);
+    box.append(btn);
     wrap.appendChild(box);
     // 플레이어 클릭(재생/일시정지)이 뒤로 전달되지 않게 막는다
     for (const t of ['click', 'dblclick', 'mousedown']) wrap.addEventListener(t, (e) => e.stopPropagation());
@@ -137,7 +136,7 @@
       if (!startApplied && segment.start > 0 && v.currentTime < segment.start - 1) {
         startApplied = true;
         v.currentTime = segment.start;
-        toast(`구간 재생: ${Y.formatTime(segment.start)}부터`);
+        toast(`▶ ${Y.formatTime(segment.start)}`);
         return;
       }
       startApplied = true;
@@ -149,7 +148,6 @@
         endHandled = true;
         v.pause();
         if (settings.blackScreen) showBlack('segment');
-        else toast('지정한 구간이 끝났습니다');
       }
     });
 
@@ -192,9 +190,8 @@
     s.dataset.set = hasStart ? '1' : '0';
     e.dataset.set = hasEnd ? '1' : '0';
     l.dataset.set = looping ? '1' : '0';
-    s.textContent = hasStart ? `시작 ${Y.formatTime(segment.start)}` : '시작 지점';
-    e.textContent = hasEnd ? `끝 ${Y.formatTime(segment.end)}` : '끝 지점';
-    l.textContent = looping ? '🔁 반복 중' : '🔁 반복';
+    s.textContent = hasStart ? `[ ${Y.formatTime(segment.start)}` : '[ 시작';
+    e.textContent = hasEnd ? `${Y.formatTime(segment.end)} ]` : '끝 ]';
     c.style.display = segment ? '' : 'none';
   }
 
@@ -216,24 +213,19 @@
         if (!v) return;
         if (part === 'clear') {
           await saveSegment({ start: null, end: null, loop: null });
-          toast('구간을 지웠습니다');
+          toast('구간 삭제');
         } else if (part === 'loop') {
           const on = !(segment && segment.loop);
           await saveSegment({ loop: on || null });
-          const range = segment && segment.end != null ? '구간' : '영상 전체';
-          toast(on ? `${range} 반복 재생` : '반복 끔 (끝에서 멈춤)');
+          toast(on ? '반복 켬' : '반복 끔');
         } else if (await saveSegment({ [part]: v.currentTime })) {
-          toast(`${part === 'start' ? '시작' : '끝'} 지점: ${Y.formatTime(v.currentTime)}`);
+          toast(`${part === 'start' ? '시작' : '끝'} ${Y.formatTime(v.currentTime)}`);
         }
       });
       return b;
     };
-    g.append(
-      mk('start', '지금 위치를 구간 시작으로 저장'),
-      mk('end', '지금 위치를 구간 끝으로 저장 (여기서 멈추고 검은 화면)'),
-      mk('loop', '구간(없으면 영상 전체)을 반복 재생'),
-      mk('clear', '이 영상의 구간 지우기'),
-    );
+    g.append(mk('start', '구간 시작'), mk('end', '구간 끝'), mk('loop', '반복'), mk('clear', '구간 삭제'));
+    g.querySelector('[data-part="loop"]').textContent = '🔁';
     g.lastChild.textContent = '✕';
     right.prepend(g);
     updateSegButtons();
