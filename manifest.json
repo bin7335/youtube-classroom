@@ -3,14 +3,14 @@
   "name": "유튜브클래스룸",
   "short_name": "유튜브클래스룸",
   "description": "교실 TV 수업용 유튜브: 추천·댓글·종료 화면·계정 정보를 가리고, 영상 끝은 검은 화면으로, 원하는 구간만 재생합니다.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "permissions": ["storage"],
   "background": {
     "service_worker": "src/background.js"
   },
   "action": {
     "default_popup": "src/popup/popup.html",
-    "default_title": "유튜브클래스룸 (Alt+Shift+Y로 수업 모드 전환)",
+    "default_title": "유튜브클래스룸 (Alt+Q로 수업 모드 전환)",
     "default_icon": {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png",
@@ -26,7 +26,7 @@
   },
   "commands": {
     "toggle-class-mode": {
-      "suggested_key": { "default": "Alt+Shift+Y" },
+      "suggested_key": { "default": "Alt+Q" },
       "description": "수업 모드 켜기/끄기"
     }
   },

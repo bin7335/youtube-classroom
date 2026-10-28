@@ -6,7 +6,7 @@ async function refreshBadge() {
   await chrome.action.setBadgeText({ text: s.enabled ? 'ON' : '' });
   await chrome.action.setBadgeBackgroundColor({ color: '#1a73e8' });
   await chrome.action.setTitle({
-    title: `유튜브클래스룸: 수업 모드 ${s.enabled ? '켜짐' : '꺼짐'} (Alt+Shift+Y)`,
+    title: `유튜브클래스룸: 수업 모드 ${s.enabled ? '켜짐' : '꺼짐'} (Alt+Q)`,
   });
 }
 
