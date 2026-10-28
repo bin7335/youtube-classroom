@@ -12,4 +12,6 @@ foreach ($item in 'manifest.json', 'src', 'icons', 'LICENSE') {
 }
 if (Test-Path $zip) { Remove-Item -Force $zip }
 Compress-Archive -Path (Join-Path $stage '*') -DestinationPath $zip
+# GitHub 릴리스용 고정 이름 (releases/latest/download/youtube-classroom.zip 링크가 항상 최신을 가리키게)
+Copy-Item -Force $zip (Join-Path $root 'dist\youtube-classroom.zip')
 Write-Output "created $zip"

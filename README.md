@@ -9,9 +9,15 @@
 - **구간 재생**: 영상마다 시작·끝 지점을 저장해, 필요한 부분만 재생하고 끝에서 멈춥니다. **반복**을 켜면 그 구간(끝이 없으면 영상 전체)을 계속 반복합니다.
 - 광고는 건드리지 않습니다.
 
+## 다운로드
+
+**[⬇ 최신 버전 받기 (youtube-classroom.zip)](https://github.com/bin7335/youtube-classroom/releases/latest/download/youtube-classroom.zip)**
+
+이 링크는 항상 최신 버전을 가리킵니다. 지난 버전은 [Releases](https://github.com/bin7335/youtube-classroom/releases)에 있습니다.
+
 ## 설치 (개발자 모드, 3분)
 
-1. 이 저장소를 내려받아 압축을 풉니다. (또는 배포받은 `youtube-classroom-v*.zip` 압축 해제)
+1. 받은 `youtube-classroom.zip`을 오른쪽 클릭 → **압축 풀기**. 생긴 폴더는 지우지 말고 보관합니다.
 2. 주소창에 `chrome://extensions` 입력 (웨일: `whale://extensions`, 엣지: `edge://extensions`).
 3. 오른쪽 위 **개발자 모드** 켜기.
 4. **압축해제된 확장 프로그램을 로드합니다** → `manifest.json`이 있는 폴더 선택.
