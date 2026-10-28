@@ -63,6 +63,7 @@
   if (state.segment) {
     $('segStart').value = state.segment.start ? Y.formatTime(state.segment.start) : '';
     $('segEnd').value = state.segment.end != null ? Y.formatTime(state.segment.end) : '';
+    $('segLoop').checked = !!state.segment.loop;
   }
 
   async function nowTime() {
@@ -86,16 +87,19 @@
     const start = rawStart ? Y.parseTime(rawStart) : null;
     const end = rawEnd ? Y.parseTime(rawEnd) : null;
     if ((rawStart && start == null) || (rawEnd && end == null)) return msg('시간은 2:10 또는 130 처럼 입력하세요', true);
-    if (start == null && end == null) return msg('시작이나 끝 중 하나는 입력하세요', true);
-    if (!Y.normalizeSegment({ start, end })) return msg('끝은 시작보다 뒤여야 합니다', true);
-    await chrome.storage.local.set({ [key]: { start, end, savedAt: Date.now() } });
-    msg(`저장됨: ${Y.formatTime(start ?? 0)} ~ ${end != null ? Y.formatTime(end) : '끝까지'}`);
+    const loop = $('segLoop').checked;
+    if (start == null && end == null && !loop) return msg('시작·끝을 입력하거나 반복을 켜세요', true);
+    if (!Y.normalizeSegment({ start, end, loop })) return msg('끝은 시작보다 뒤여야 합니다', true);
+    await chrome.storage.local.set({ [key]: { start, end, loop, savedAt: Date.now() } });
+    const range = `${Y.formatTime(start ?? 0)} ~ ${end != null ? Y.formatTime(end) : '끝까지'}`;
+    msg(`저장됨: ${range}${loop ? ' · 반복' : ''}`);
   });
 
   $('segClear').addEventListener('click', async () => {
     await chrome.storage.local.remove(key);
     $('segStart').value = '';
     $('segEnd').value = '';
+    $('segLoop').checked = false;
     msg('구간을 지웠습니다');
   });
 })();

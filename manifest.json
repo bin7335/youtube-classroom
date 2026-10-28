@@ -3,7 +3,7 @@
   "name": "유튜브클래스룸",
   "short_name": "유튜브클래스룸",
   "description": "교실 TV 수업용 유튜브: 추천·댓글·종료 화면·계정 정보를 가리고, 영상 끝은 검은 화면으로, 원하는 구간만 재생합니다.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "permissions": ["storage"],
   "background": {
     "service_worker": "src/background.js"

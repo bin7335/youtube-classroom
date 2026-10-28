@@ -40,9 +40,12 @@ test('parseTime / formatTime', () => {
 });
 
 test('normalizeSegment', () => {
-  assert.deepEqual(Y.normalizeSegment({ start: '0:10', end: '0:20' }), { start: 10, end: 20 });
-  assert.deepEqual(Y.normalizeSegment({ end: '1:00' }), { start: 0, end: 60 });
-  assert.deepEqual(Y.normalizeSegment({ start: 30 }), { start: 30, end: null });
+  assert.deepEqual(Y.normalizeSegment({ start: '0:10', end: '0:20' }), { start: 10, end: 20, loop: false });
+  assert.deepEqual(Y.normalizeSegment({ end: '1:00' }), { start: 0, end: 60, loop: false });
+  assert.deepEqual(Y.normalizeSegment({ start: 30 }), { start: 30, end: null, loop: false });
+  assert.deepEqual(Y.normalizeSegment({ start: 5, end: 9, loop: true }), { start: 5, end: 9, loop: true });
+  assert.deepEqual(Y.normalizeSegment({ loop: true }), { start: 0, end: null, loop: true });
+  assert.equal(Y.normalizeSegment({ loop: false }), null);
   assert.equal(Y.normalizeSegment({ start: 20, end: 10 }), null);
   assert.equal(Y.normalizeSegment({}), null);
   assert.equal(Y.normalizeSegment(null), null);

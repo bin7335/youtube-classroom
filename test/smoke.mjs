@@ -59,7 +59,7 @@ try {
   check('댓글 숨김', hidden.comments !== 'visible', hidden.comments);
 
   const segBtns = await page.locator('.ytc-seg-group .ytc-seg-btn').count();
-  check('플레이어에 구간 버튼 추가', segBtns === 3, `${segBtns}개`);
+  check('플레이어에 구간 버튼 추가', segBtns === 4, `${segBtns}개`);
 
   // 구간: 0:02 ~ 0:05 저장 → 5초 근처에서 멈추고 검은 화면
   await sw.evaluate((key) => chrome.storage.local.set({ [key]: { start: 2, end: 5 } }), 'seg:' + VIDEO);
@@ -73,6 +73,22 @@ try {
   await page.waitForTimeout(800);
   const after = await page.evaluate(() => ({ t: document.querySelector('video').currentTime, black: !!document.querySelector('.ytc-black') }));
   check('다시 보기 → 시작 지점부터', !after.black && after.t >= 2 && after.t < 4.5, `t=${after.t.toFixed(1)}s`);
+
+  // 반복: 0:02 ~ 0:04 반복 → 7초 동안 검은 화면 없이 2-4초 사이를 계속 재생
+  await sw.evaluate((key) => chrome.storage.local.set({ [key]: { start: 2, end: 4, loop: true } }), 'seg:' + VIDEO);
+  await page.evaluate(() => { const v = document.querySelector('video'); v.currentTime = 2; v.play(); });
+  const samples = [];
+  for (let i = 0; i < 7; i++) {
+    await page.waitForTimeout(1000);
+    samples.push(await page.evaluate(() => {
+      const v = document.querySelector('video');
+      return { t: v.currentTime, paused: v.paused, black: !!document.querySelector('.ytc-black') };
+    }));
+  }
+  const loopOk = samples.every((s) => !s.paused && !s.black && s.t >= 1.9 && s.t < 4.6);
+  check('구간 반복 재생', loopOk, samples.map((s) => s.t.toFixed(1)).join(','));
+  const loopLabel = await page.locator('.ytc-seg-btn[data-part="loop"]').textContent();
+  check('반복 버튼 표시', loopLabel.includes('반복 중'), loopLabel);
 
   // 수업 모드 끄기 → 새로고침 없이 클래스 제거
   await sw.evaluate(async () => {

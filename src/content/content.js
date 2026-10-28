@@ -40,20 +40,25 @@
     updateSegButtons();
   }
 
-  async function saveSegmentPart(part, seconds) {
-    if (!videoId) return;
+  // patch: { start?: 초|null, end?: 초|null, loop?: boolean }. null이면 그 값을 지운다.
+  // 저장에 실패(끝이 시작보다 앞)하면 false.
+  async function saveSegment(patch) {
+    if (!videoId) return false;
     const key = Y.segmentKey(videoId);
     const r = await storageGet('local', key);
     const raw = { ...(r[key] || {}) };
-    if (seconds == null) delete raw[part];
-    else raw[part] = Math.round(seconds * 10) / 10;
+    for (const [k, v] of Object.entries(patch)) {
+      if (v == null) delete raw[k];
+      else raw[k] = typeof v === 'number' ? Math.round(v * 10) / 10 : v;
+    }
     const norm = Y.normalizeSegment(raw);
     if (!norm && (raw.start != null || raw.end != null)) {
       toast('끝 지점은 시작 지점보다 뒤여야 합니다');
-      return;
+      return false;
     }
-    if (norm) await storageSet('local', { [key]: { start: raw.start ?? null, end: raw.end ?? null, savedAt: Date.now() } });
+    if (norm) await storageSet('local', { [key]: { start: raw.start ?? null, end: raw.end ?? null, loop: raw.loop === true, savedAt: Date.now() } });
     else await new Promise((res) => chrome.storage.local.remove(key, res));
+    return true;
   }
 
   // ---------- 숨김 클래스 ----------
@@ -136,6 +141,10 @@
         return;
       }
       startApplied = true;
+      if (segment.loop && Y.reachedEnd(v.currentTime, segment)) {
+        v.currentTime = segment.start;
+        return;
+      }
       if (!endHandled && Y.reachedEnd(v.currentTime, segment)) {
         endHandled = true;
         v.pause();
@@ -145,8 +154,9 @@
     });
 
     v.addEventListener('ended', () => {
-      if (!settings.enabled || !settings.blackScreen || isAd(getPlayer(v))) return;
-      showBlack('ended');
+      if (!settings.enabled || isAd(getPlayer(v))) return;
+      if (segment && segment.loop) { replay(); return; }
+      if (settings.blackScreen) showBlack('ended');
     });
 
     // 사용자가 다시 재생하거나 앞쪽으로 이동하면 검은 화면을 걷고 끝 정지를 다시 준비한다
@@ -174,13 +184,17 @@
     if (!g) return;
     const s = g.querySelector('[data-part="start"]');
     const e = g.querySelector('[data-part="end"]');
+    const l = g.querySelector('[data-part="loop"]');
     const c = g.querySelector('[data-part="clear"]');
     const hasStart = segment && segment.start > 0;
     const hasEnd = segment && segment.end != null;
+    const looping = !!(segment && segment.loop);
     s.dataset.set = hasStart ? '1' : '0';
     e.dataset.set = hasEnd ? '1' : '0';
+    l.dataset.set = looping ? '1' : '0';
     s.textContent = hasStart ? `시작 ${Y.formatTime(segment.start)}` : '시작 지점';
     e.textContent = hasEnd ? `끝 ${Y.formatTime(segment.end)}` : '끝 지점';
+    l.textContent = looping ? '🔁 반복 중' : '🔁 반복';
     c.style.display = segment ? '' : 'none';
   }
 
@@ -201,11 +215,14 @@
         const v = getVideo();
         if (!v) return;
         if (part === 'clear') {
-          await saveSegmentPart('start', null);
-          await saveSegmentPart('end', null);
+          await saveSegment({ start: null, end: null, loop: null });
           toast('구간을 지웠습니다');
-        } else {
-          await saveSegmentPart(part, v.currentTime);
+        } else if (part === 'loop') {
+          const on = !(segment && segment.loop);
+          await saveSegment({ loop: on || null });
+          const range = segment && segment.end != null ? '구간' : '영상 전체';
+          toast(on ? `${range} 반복 재생` : '반복 끔 (끝에서 멈춤)');
+        } else if (await saveSegment({ [part]: v.currentTime })) {
           toast(`${part === 'start' ? '시작' : '끝'} 지점: ${Y.formatTime(v.currentTime)}`);
         }
       });
@@ -214,6 +231,7 @@
     g.append(
       mk('start', '지금 위치를 구간 시작으로 저장'),
       mk('end', '지금 위치를 구간 끝으로 저장 (여기서 멈추고 검은 화면)'),
+      mk('loop', '구간(없으면 영상 전체)을 반복 재생'),
       mk('clear', '이 영상의 구간 지우기'),
     );
     g.lastChild.textContent = '✕';

@@ -1,6 +1,6 @@
 {
   "name": "youtube-classroom",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "교실 TV 수업용 유튜브 크롬 확장",
   "license": "MIT",

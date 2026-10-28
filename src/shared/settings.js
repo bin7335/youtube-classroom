@@ -72,14 +72,16 @@
     return h ? `${h}:${String(m).padStart(2, '0')}:${r}` : `${m}:${r}`;
   }
 
-  // 구간 정규화: start/end 중 하나만 있어도 된다. 둘 다 없거나 end<=start면 null.
+  // 구간 정규화: start/end 중 하나만 있어도 된다. loop만 있으면 영상 전체 반복.
+  // 아무것도 없거나 end<=start면 null.
   function normalizeSegment(seg) {
     if (!seg || typeof seg !== 'object') return null;
     const start = parseTime(seg.start ?? '');
     const end = parseTime(seg.end ?? '');
-    if (start == null && end == null) return null;
+    const loop = seg.loop === true;
+    if (start == null && end == null && !loop) return null;
     if (start != null && end != null && end <= start) return null;
-    return { start: start ?? 0, end: end ?? null };
+    return { start: start ?? 0, end: end ?? null, loop };
   }
 
   // 지금 재생 위치에서 멈춰야 하는가 (끝 지점 도달)
