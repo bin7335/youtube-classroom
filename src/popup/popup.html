@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <title>유튜브클래스룸</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="head">
+    <img src="../../icons/icon48.png" alt="" width="28" height="28">
+    <h1>유튜브클래스룸</h1>
+  </header>
+
+  <label class="master" id="masterRow">
+    <span class="master-text">
+      <strong>수업 모드</strong>
+      <small id="masterState">켜짐</small>
+    </span>
+    <input type="checkbox" id="enabled" class="switch">
+  </label>
+
+  <section class="group" id="optionGroup">
+    <h2>가리기</h2>
+    <div id="hideList"></div>
+    <h2>재생</h2>
+    <label class="row"><input type="checkbox" id="autoplayOff"> 자동재생(다음 영상) 끄기</label>
+    <label class="row"><input type="checkbox" id="blackScreen"> 영상이 끝나면 검은 화면으로 멈춤</label>
+  </section>
+
+  <section class="group" id="segGroup" hidden>
+    <h2>이 영상 구간 재생</h2>
+    <div class="seg">
+      <label>시작 <input id="segStart" placeholder="0:00" inputmode="numeric"></label>
+      <label>끝 <input id="segEnd" placeholder="끝까지" inputmode="numeric"></label>
+    </div>
+    <div class="seg-actions">
+      <button type="button" id="segNowStart">지금 위치 → 시작</button>
+      <button type="button" id="segNowEnd">지금 위치 → 끝</button>
+    </div>
+    <div class="seg-actions">
+      <button type="button" id="segSave" class="primary">저장</button>
+      <button type="button" id="segClear">지우기</button>
+    </div>
+    <p class="msg" id="segMsg"></p>
+  </section>
+  <p class="hint" id="segHint">유튜브 영상 화면에서 열면 구간을 지정할 수 있습니다. 플레이어 아래쪽 [시작 지점]·[끝 지점] 버튼으로도 됩니다.</p>
+
+  <footer class="foot">
+    <span><kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>Y</kbd> 수업 모드 전환</span>
+    <span id="version"></span>
+  </footer>
+
+  <script src="../shared/settings.js"></script>
+  <script src="../shared/store.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

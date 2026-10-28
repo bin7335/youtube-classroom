@@ -1,0 +1,171 @@
+/*
+ * 숨김 규칙. content.js가 <html>에 ytc-on / ytc-hide-<항목> 클래스를 붙이면 적용된다.
+ * 클래스만 바꾸면 되므로 새로고침 없이 즉시 켜고 끌 수 있다.
+ * 유튜브가 구조를 바꾸면 이 파일의 선택자만 고치면 된다.
+ */
+
+/* 오른쪽 추천 영상 (재생목록 패널은 남긴다) */
+html.ytc-hide-sidebar ytd-watch-flexy #related,
+html.ytc-hide-sidebar ytd-watch-next-secondary-results-renderer,
+html.ytc-hide-sidebar ytm-item-section-renderer[section-identifier="related-items"] {
+  display: none !important;
+}
+
+/* 댓글 */
+html.ytc-hide-comments ytd-comments,
+html.ytc-hide-comments #comments,
+html.ytc-hide-comments ytm-comment-section-renderer,
+html.ytc-hide-comments ytd-engagement-panel-section-list-renderer[target-id="engagement-panel-comments-section"] {
+  display: none !important;
+}
+
+/* 영상 끝 추천 화면 (유튜브 사이트·임베드 공통) */
+html.ytc-hide-endscreen .ytp-endscreen-content,
+html.ytc-hide-endscreen .ytp-ce-element,
+html.ytc-hide-endscreen .html5-endscreen,
+html.ytc-hide-endscreen .ytp-fullscreen-grid,
+html.ytc-hide-endscreen .ytp-fullscreen-grid-peeking,
+html.ytc-hide-endscreen .ytp-autonav-endscreen-countdown-overlay,
+html.ytc-hide-endscreen .ytp-upnext {
+  display: none !important;
+}
+
+/* 영상 중 정보 카드·채널 워터마크 */
+html.ytc-hide-cards .ytp-cards-button,
+html.ytc-hide-cards .ytp-cards-teaser,
+html.ytc-hide-cards .iv-branding,
+html.ytc-hide-cards .ytp-suggested-action,
+html.ytc-hide-cards .ytp-featured-product {
+  display: none !important;
+}
+
+/* 홈 화면 추천 피드·쇼츠 */
+html.ytc-hide-home ytd-browse[page-subtype="home"] #primary,
+html.ytc-hide-home ytd-reel-shelf-renderer,
+html.ytc-hide-home ytd-rich-shelf-renderer[is-shorts],
+html.ytc-hide-home ytd-rich-section-renderer:has(ytd-rich-shelf-renderer[is-shorts]),
+html.ytc-hide-home ytd-guide-entry-renderer:has(a[title="Shorts"]),
+html.ytc-hide-home ytd-mini-guide-entry-renderer[aria-label="Shorts"],
+html.ytc-hide-home ytd-guide-entry-renderer:has(a[title="Shorts" i]),
+html.ytc-hide-home grid-shelf-view-model:has(ytm-shorts-lockup-view-model),
+html.ytc-hide-home ytm-shorts-lockup-view-model,
+html.ytc-hide-home ytd-watch-flexy ytd-reel-shelf-renderer {
+  display: none !important;
+}
+html.ytc-hide-home ytd-browse[page-subtype="home"]::after {
+  content: "수업 모드: 홈 추천이 숨겨져 있습니다. 위 검색창에서 영상을 찾으세요.";
+  display: block;
+  padding: 80px 24px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--yt-spec-text-secondary, #606060);
+}
+
+/* 검색어 자동완성·이전 검색어 */
+html.ytc-hide-search .ytSearchboxComponentSuggestionsContainer,
+html.ytc-hide-search .sbdd_a,
+html.ytc-hide-search .gstl_50,
+html.ytc-hide-search ytd-searchbox-spt {
+  display: none !important;
+}
+
+/* 계정 아이콘·알림·구독·시청 기록 */
+html.ytc-hide-account ytd-topbar-menu-button-renderer:has(#avatar-btn),
+html.ytc-hide-account #avatar-btn,
+html.ytc-hide-account ytd-notification-topbar-button-renderer,
+html.ytc-hide-account ytd-guide-renderer #sections > ytd-guide-section-renderer:not(:first-child),
+html.ytc-hide-account ytd-guide-entry-renderer:has(a[href^="/feed/history"]),
+html.ytc-hide-account ytd-guide-entry-renderer:has(a[href^="/feed/you"]),
+html.ytc-hide-account ytd-mini-guide-entry-renderer:has(a[href^="/feed/you"]),
+html.ytc-hide-account ytd-mini-guide-entry-renderer:has(a[href^="/feed/subscriptions"]) {
+  display: none !important;
+}
+
+/* 임베드(다른 사이트에 넣은 영상): 일시정지 추천, 제목·로고 클릭으로 유튜브 이동 차단 */
+html.ytc-embed.ytc-hide-embed .ytp-pause-overlay,
+html.ytc-embed.ytc-hide-embed .ytp-pause-overlay-container,
+html.ytc-embed.ytc-hide-embed .ytp-show-cards-title,
+html.ytc-embed.ytc-hide-embed .ytp-endscreen-content,
+html.ytc-embed.ytc-hide-embed .ytp-ce-element,
+html.ytc-embed.ytc-hide-embed .ytp-more-videos-view {
+  display: none !important;
+}
+html.ytc-embed.ytc-hide-embed .ytp-title-link,
+html.ytc-embed.ytc-hide-embed .ytp-title-channel,
+html.ytc-embed.ytc-hide-embed .ytp-title-channel-logo,
+html.ytc-embed.ytc-hide-embed .ytp-youtube-button,
+html.ytc-embed.ytc-hide-embed .ytp-impression-link {
+  pointer-events: none !important;
+}
+
+/* ---- 확장이 추가하는 요소 ---- */
+
+/* 검은 화면 정지 */
+.ytc-black {
+  position: absolute;
+  inset: 0;
+  z-index: 2147483000;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ytc-black-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  font-family: "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 15px;
+}
+.ytc-black-replay {
+  font: inherit;
+  font-size: 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  padding: 8px 18px;
+  cursor: pointer;
+}
+.ytc-black-replay:hover { background: rgba(255, 255, 255, 0.22); }
+
+/* 플레이어 컨트롤 바의 구간 버튼 */
+.ytc-seg-group {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  vertical-align: top;
+  margin-right: 6px;
+}
+.ytc-seg-btn {
+  font-family: "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  font-size: 12px;
+  line-height: 1;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 6px;
+  padding: 5px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ytc-seg-btn:hover { background: rgba(255, 255, 255, 0.26); }
+.ytc-seg-btn[data-set="1"] { background: rgba(62, 166, 255, 0.45); border-color: rgba(62, 166, 255, 0.9); }
+
+.ytc-toast {
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  transform: translateX(-50%);
+  z-index: 2147483001;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-family: "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  pointer-events: none;
+}

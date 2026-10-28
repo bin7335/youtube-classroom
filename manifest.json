@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "유튜브클래스룸",
+  "short_name": "유튜브클래스룸",
+  "description": "교실 TV 수업용 유튜브: 추천·댓글·종료 화면·계정 정보를 가리고, 영상 끝은 검은 화면으로, 원하는 구간만 재생합니다.",
+  "version": "0.1.0",
+  "permissions": ["storage"],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "유튜브클래스룸 (Alt+Shift+Y로 수업 모드 전환)",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "commands": {
+    "toggle-class-mode": {
+      "suggested_key": { "default": "Alt+Shift+Y" },
+      "description": "수업 모드 켜기/끄기"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*",
+        "https://m.youtube.com/*",
+        "https://www.youtube-nocookie.com/embed/*"
+      ],
+      "all_frames": true,
+      "run_at": "document_start",
+      "css": ["src/content/content.css"],
+      "js": ["src/shared/settings.js", "src/content/content.js"]
+    }
+  ]
+}
