@@ -1,4 +1,4 @@
-# 유튜브클래스룸
+# 클래스룸 for YouTube
 
 교실 TV로 유튜브를 틀 때 생기는 사고를 막는 크롬·웨일·엣지 확장입니다.
 
@@ -15,7 +15,7 @@
 2. 주소창에 `chrome://extensions` 입력 (웨일: `whale://extensions`, 엣지: `edge://extensions`).
 3. 오른쪽 위 **개발자 모드** 켜기.
 4. **압축해제된 확장 프로그램을 로드합니다** → `manifest.json`이 있는 폴더 선택.
-5. 툴바 퍼즐 아이콘에서 유튜브클래스룸을 **고정**합니다.
+5. 툴바 퍼즐 아이콘에서 클래스룸 for YouTube를 **고정**합니다.
 
 ## 사용법
 
@@ -56,6 +56,10 @@ npm run pack      # dist/ 에 배포용 zip 생성
 | `src/content/content.js` | 클래스 적용, 자동재생 끄기, 검은 화면, 구간 재생 |
 | `src/popup/` | 툴바 팝업 |
 | `src/background.js` | 단축키, `ON` 배지 |
+
+## 상표
+
+YouTube는 Google LLC의 상표입니다. 이 확장은 Google·YouTube와 관련이 없는 비공식 도구입니다.
 
 ## 라이선스
 
